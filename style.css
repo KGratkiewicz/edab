@@ -119,7 +119,7 @@ p {
   z-index: 1000;
   left: 0;
   top: 0;
-  width: 100vw;
+  width: 100%;
   height: auto;
 }
 #header .header {
@@ -903,6 +903,8 @@ p {
 }
 #footer .social-item img {
   transition: 0.3s ease filter;
+  height: 100%;
+  width: auto;
 }
 
 #footer p {
