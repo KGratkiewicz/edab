@@ -725,7 +725,7 @@ p {
 }
 #about .col-left .about-img {
   height: 100%;
-  width: 100%;
+  width: auto;
   position: relative;
   border: 10px solid var(--text-light);
 }
