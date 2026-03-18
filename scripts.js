@@ -11,6 +11,8 @@
 
   const hamburger = document.querySelector(SELECTORS.hamburger);
   const mobileMenu = document.querySelector(SELECTORS.mobileMenu);
+  const navList = document.querySelector('.header .nav-bar .nav-list');
+  const header = document.getElementById('header');
   const menuItems = document.querySelectorAll(SELECTORS.menuItems);
   const tabLinks = Array.from(document.querySelectorAll(SELECTORS.tabLinks));
   const tabPanels = Array.from(document.querySelectorAll(SELECTORS.tabPanels));
@@ -27,7 +29,7 @@
   const desktopMedia = window.matchMedia('(min-width: 900px)');
 
   function setMenuState(isOpen) {
-    if (!hamburger || !mobileMenu) {
+    if (!hamburger || !mobileMenu || !navList) {
       return;
     }
 
@@ -35,11 +37,12 @@
     hamburger.setAttribute('aria-expanded', String(isOpen));
     hamburger.setAttribute('aria-label', isOpen ? 'Zamknij menu' : 'Otwórz menu');
     mobileMenu.classList.toggle('active', isOpen);
+    navList.classList.toggle('is-open', isOpen);
     document.body.style.overflow = isOpen ? 'hidden' : '';
   }
 
   function setupMenu() {
-    if (!hamburger || !mobileMenu) {
+    if (!hamburger || !mobileMenu || !navList) {
       return;
     }
 
@@ -52,11 +55,33 @@
       item.addEventListener('click', () => setMenuState(false));
     });
 
+    document.addEventListener('click', (event) => {
+      if (!mobileMenu.classList.contains('active')) {
+        return;
+      }
+
+      const clickedInsideNav = event.target instanceof Element && event.target.closest('.nav-list');
+      if (!clickedInsideNav) {
+        setMenuState(false);
+      }
+    });
+
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         setMenuState(false);
       }
     });
+
+    const syncHeaderOnScroll = () => {
+      if (!header) {
+        return;
+      }
+
+      header.classList.toggle('is-scrolled', window.scrollY > 12);
+    };
+
+    syncHeaderOnScroll();
+    window.addEventListener('scroll', syncHeaderOnScroll, { passive: true });
 
     const closeOnDesktop = (event) => {
       if (event.matches) {
